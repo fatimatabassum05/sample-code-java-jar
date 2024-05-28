@@ -4,7 +4,8 @@ pipeline{
        stage('Git Checkout Stage'){
             agent {label 'sonar_node'}
             steps{
-                git branch: 'main', url: 'https://github.com/fatimatabassum05/sonarqube-example.git'
+                git branch: 'main', url: 'https://github.com/fatimatabassum05/sample-code-java-jar
+'
             }
          }        
        stage('Build Stage'){
