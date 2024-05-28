@@ -22,7 +22,7 @@ pipeline{
             }
         }
         stage('Build docker Image'){
-          agent {label 'docker_node'}
+          agent {label 'docker_node_new'}
           steps{
             sh 'docker build -t fatimatabassum/fatima12:${BUILD_NUMBER}'
           }
