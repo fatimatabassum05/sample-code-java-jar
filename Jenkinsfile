@@ -4,34 +4,33 @@ pipeline{
        stage('Git Checkout Stage'){
             agent {label 'sonar_node'}
             steps{
-                git branch: 'main', url: 'https://github.com/fatimatabassum05/sample-code-java-jar
-'
+                git branch: 'main', url: 'https://github.com/fatimatabassum05/sonarqube-example.git'
             }
          }        
        stage('Build Stage'){
             agent {label 'sonar_node'}
             steps{
-                sh '/opt/apache-maven-3.9.6/bin/mvn clean install'
+                sh 'mvn clean install'
             }
          }
         stage('SonarQube Analysis Stage') {
             agent {label 'sonar_node'}
             steps{
-                withSonarQubeEnv('sonar_node') { 
-                    sh "/opt/apache-maven-3.9.6/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=sonarqube_1"
+                withSonarQubeEnv('sonarqube_1') { 
+                    sh "mvn clean verify sonar:sonar -Dsonar.projectKey=sonarqube_1"
                 }
             }
         }
         stage('Build docker Image'){
           agent {label 'docker_node_new'}
           steps{
-            sh 'docker build -t fatimatabassum/fatima12:${BUILD_NUMBER}'
+            sh 'docker build -t fatimatabassum/fatima12:${BUILD_NUMBER} .'
           }
         }
         stage('Push To Dockerhub'){
           agent {label 'docker_node_new'}
           steps{
-            sh 'docker push -t fatimatabassum/fatima12:${BUILD_NUMBEER}'
+            sh 'docker push fatimatabassum/fatima12:${BUILD_NUMBER}'
           }
         }
         stage('Deploy Stage') {
